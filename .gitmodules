@@ -1,0 +1,3 @@
+[submodule "qtile/qtile-examples"]
+	path = qtile/qtile-examples
+	url = https://github.com/ShobhanKarthick/LinuxDotFiles.git
