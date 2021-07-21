@@ -209,10 +209,10 @@ awful.keyboard.append_global_keybindings({
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
+--    awful.key({ modkey, "Control" }, "r", awesome.restart,
+--              {description = "reload awesome", group = "awesome"}),
+--    awful.key({ modkey, "Shift"   }, "c", awesome.quit,
+--              {description = "quit awesome", group = "awesome"}),
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
@@ -559,19 +559,26 @@ end)
 -- --------------------------------------------------------------------------------------
 
 --gaps
-beautiful.useless_gap = 3
+beautiful.useless_gap = 3.5
 
 --autostart
--- awful.spawn.with_shell("picom")
+awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --set-zoom-fill --random /run/media/lsw/LocalDisk2/Wallpapers")
-
+awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("klipper")
 
 awful.keyboard.append_global_keybindings({
 
     awful.key({ modkey },            "r",     function ()
+
     awful.util.spawn("dmenu_run") end,
               {description = "run prompt", group = "launcher"}),
 
+    awful.key({ modkey, "Shift" }, "r", awesome.restart,
+              {description = "reload awesome", group = "awesome"}),
+
+    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+              {description = "quit awesome", group = "awesome"}),
 })
 
 
