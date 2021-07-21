@@ -140,11 +140,11 @@ ex ()
 
 export BROWSER=/usr/bin/firefox-developer-edition
 
-export R_LIBS="/run/media/lsw/Local Disk2/Shobhan/Applications/R"
+export R_LIBS="/mnt/LocalDisk1/Shobhan/Applications/R"
 
-export R_LIBS_USER="/run/media/lsw/Local Disk2/Shobhan/Applications/R"
+export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
 
-export R_LIBS_SITE="/run/media/lsw/Local Disk2/Shobhan/Applications/R"
+export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
 
 export NVM_DIR="$HOME/.nvm"
@@ -152,6 +152,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 alias vi=vim
 alias r=ranger
-
+alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 export EDITOR="vim"
 set -o vi
