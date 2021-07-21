@@ -39,7 +39,7 @@ end)
 beautiful.init("/home/lsw/.config/awesome/themes/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "konsole"
+terminal = "alacritty"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -562,10 +562,10 @@ end)
 beautiful.useless_gap = 3.5
 
 --autostart
-awful.spawn.with_shell("picom")
-awful.spawn.with_shell("nitrogen --set-zoom-fill --random /run/media/lsw/LocalDisk2/Wallpapers")
-awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("klipper")
+awful.spawn.with_shell("picom --config /home/lsw/.config/picom/picom.conf")
+awful.spawn.with_shell("nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers")
+-- awful.spawn.with_shell("nm-applet")
+-- awful.spawn.with_shell("klipper")
 
 awful.keyboard.append_global_keybindings({
 
