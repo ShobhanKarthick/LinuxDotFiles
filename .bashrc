@@ -146,12 +146,26 @@ export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
 
 export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 alias vi=vim
 alias r=ranger
 alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
+alias pacman="sudo pacman"
+alias battery="upower --enumerate | grep BAT | xargs upower --show-info | \grep percent"
+
+function mkcd (){
+    mkdir $1
+    cd $1
+}
+
+function pac-search (){
+	pacman -Ss $1 | awk -f /mnt/LocalDisk1/Shobhan/Workspace/Linux/pacman-colored-search/colored-pacman-search.awk	
+	
+}
+
 export EDITOR="vim"
+
 set -o vi
