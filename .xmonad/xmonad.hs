@@ -14,6 +14,7 @@ import qualified Data.Map        as M
 
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
+import XMonad.Actions.Minimize
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -66,7 +67,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask, xK_q), sendMessage $ DecGap 5 R)  -- decrement the right-hand gap
 
     -- launch a terminal
-    , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+    , ((modm,               xK_Return     ), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
@@ -76,6 +77,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
+
+    , ((modm,               xK_m     ), withFocused minimizeWindow)
+    , ((modm .|. shiftMask, xK_m     ), withLastMinimized maximizeWindowAndFocus)
 
      -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
@@ -96,10 +100,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_k     ), windows W.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
+    -- , ((modm,               xK_m     ), windows W.focusMaster  )
 
     -- Swap the focused window and the master window
-    , ((modm,               xK_Return), windows W.swapMaster)
+    -- , ((modm,               xK_Return), windows W.swapMaster)
 
     -- Swap the focused window with the next window
     , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
@@ -297,7 +301,7 @@ help :: String
 help = unlines ["The default modifier key is 'alt'. Default keybindings:",
     "",
     "-- launching and killing programs",
-    "mod-Shift-Enter  Launch xterminal",
+    "mod-Enter  Launch xterminal",
     "mod-p            Launch dmenu",
     "mod-Shift-p      Launch gmrun",
     "mod-Shift-c      Close/kill the focused window",
