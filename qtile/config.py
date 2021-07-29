@@ -35,33 +35,58 @@ mod = "mod4"
 terminal = guess_terminal()
 
 keys = [
-    # Switch between windows
+
+    ########################### Window Focus ###############################
+
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(),
-        desc="Move window focus to other window"),
+    Key([mod], "Tab", lazy.layout.next(), desc="Move window focus to other window"),
 
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
+    ########################## Window Movement #############################
+
+    Key([mod, "shift"], "h", 
+        lazy.layout.shuffle_left(),
+        lazy.layout.swap_left(),
         desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
+
+    Key([mod, "shift"], "l", 
+        lazy.layout.shuffle_right(),
+        lazy.layout.swap_right(),
         desc="Move window to the right"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
         desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
-    # Grow windows. If current window is on the edge of screen and direction
-    # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(),
+    ########################### Window Resize ################################
+
+    Key([mod, "control"], "h", 
+        lazy.layout.grow_left(),
+        lazy.layout.shrink_main(),
+        lazy.layout.decrease_ratio(),
+        lazy.layout.add(),
         desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(),
+
+    Key([mod, "control"], "l", 
+        lazy.layout.grow_right(),
+        lazy.layout.grow_main(),
+        lazy.layout.increase_ratio(),
+        lazy.layout.delete(),
         desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(),
+
+    Key([mod, "control"], "j", 
+        lazy.layout.grow_down(),
+        lazy.layout.shrink(),
+        lazy.layout.increase_nmaster(),
         desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+
+    Key([mod, "control"], "k", 
+        lazy.layout.grow_up(), 
+        lazy.layout.grow(),
+        lazy.layout.decrease_nmaster(),
+        desc="Grow window up"),
+
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
 
     # Toggle between split and unsplit sides of stack.
@@ -72,15 +97,18 @@ keys = [
         desc="Toggle between split and unsplit sides of stack"),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
 
+    
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "space", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
 
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
+    Key([mod, "shift"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
 ]
+
+ ############################## Groups ###################################
 
 groups = [Group(i) for i in "123456789"]
 
@@ -99,54 +127,60 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
+ ############################## Layouts ###################################
+
 layouts = [
+    layout.MonadTall(change_size=10, border_width=1),
     layout.Columns(border_focus_stack=['#00ff00', '#00ff00'], border_width=2),
     layout.Max(),
-    # Try more layouts by unleashing below layouts.
     layout.Stack(num_stacks=2),
     layout.Bsp(),
     layout.Matrix(),
-    layout.MonadTall(),
     layout.MonadWide(),
     layout.RatioTile(),
     layout.Tile(),
-    layout.TreeTab(),
     layout.VerticalTile(),
     layout.Zoomy(),
 ]
 
+ ############################ Widget List ################################
+
+def widgetList():
+    widgets = [
+        widget.CurrentLayout(),
+        widget.GroupBox(),
+        widget.Prompt(),
+        widget.WindowName(),
+        widget.Chord(
+            chords_colors={
+                'launch': ("#ff0000", "#ffffff"),
+            },
+            name_transform=lambda name: name.upper(),
+        ),
+        widget.TextBox("default config", name="default"),
+        widget.Systray(),
+        widget.Clock(format='%a, %d %b %Y %I:%M %p'),
+        widget.QuickExit(),
+    ]
+    return widgets
+
+ ########################### Widget Config ###############################
+
 widget_defaults = dict(
-    font='Open Sans',
+    font='Roboto',
     fontsize=12,
-    padding=10,
+    padding=8,
 )
 extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        top=bar.Bar(
-            [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.TextBox("default config", name="default"),
-                widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-                widget.QuickExit(),
-            ],
-            24,
-        ),
+        top=bar.Bar(widgetList(), 24,),
     ),
 ]
 
-# Drag floating layouts.
+ ###################### Floating Window Config #############################
+
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
