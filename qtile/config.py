@@ -24,15 +24,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+
 from typing import List  # noqa: F401
 
 from libqtile import bar, layout, widget
+from libqtile import qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 mod = "mod4"
-terminal = guess_terminal()
+terminal = "alacritty"
 
 keys = [
 
@@ -208,9 +211,37 @@ def widgetList():
             },
             name_transform=lambda name: name.upper(),
         ),
-        widget.TextBox("default config", name="default"),
-        widget.Systray(),
+        widget.TextBox(
+            "default config",
+            name="default",
+            mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e vim ' + os.path.expanduser('~/.config/qtile/config.py')),},
+        ),
+        widget.TextBox(
+            " | ",
+            name="pipe-separator",
+        ),
         widget.Clock(format='%a, %d %b %Y %I:%M %p'),
+        widget.TextBox(
+            " | ",
+            name="pipe-separator",
+        ),
+        widget.Net(
+            interface="wlp3s0",
+            format='Net {down} ↓↑ {up}'
+        ),
+        widget.TextBox(
+            " | ",
+            name="pipe-separator",
+        ),        
+        widget.Battery(
+            format="Bat  {char} {percent:2.0%}  |  {hour:d}:{min:02d}",
+            update_interval=30,
+        ),
+        widget.TextBox(
+            " || ",
+            name="pipe-separator",
+        ),
+        widget.Systray(),
         widget.QuickExit(),
     ]
     return widgets
