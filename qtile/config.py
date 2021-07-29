@@ -243,7 +243,10 @@ def widgetList():
             name="pipe-separator",
         ),
         widget.Systray(),
-        widget.QuickExit(),
+        widget.QuickExit(
+            default_text="\u23FB",
+            fontsize=15,
+        ),
     ]
     return widgets
 
