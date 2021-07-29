@@ -106,6 +106,8 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
+    Key([mod], "p", lazy.spawn("dmenu_run"),
+        desc="Spawn a command using a prompt widget"),
 ]
 
  ############################## Groups ###################################
@@ -130,17 +132,66 @@ for i in groups:
  ############################## Layouts ###################################
 
 layouts = [
-    layout.MonadTall(change_size=10, border_width=1),
-    layout.Columns(border_focus_stack=['#00ff00', '#00ff00'], border_width=2),
-    layout.Max(),
-    layout.Stack(num_stacks=2),
-    layout.Bsp(),
-    layout.Matrix(),
-    layout.MonadWide(),
-    layout.RatioTile(),
-    layout.Tile(),
-    layout.VerticalTile(),
-    layout.Zoomy(),
+
+    layout.MonadTall(
+        change_size=10, 
+        border_width=2,
+        margin=8,
+    ),    
+
+    layout.MonadWide(
+        border_width=2,
+        margin=8,
+    ),
+
+    layout.Columns(
+        border_focus_stack=['#00ff00', '#00ff00'],
+        border_width=2,
+        margin=8,
+    ),
+        
+    layout.Max(
+        border_width=2,
+    ),
+
+    layout.Floating(
+        border_width=2,
+    ),
+
+    layout.Stack(
+        num_stacks=2,
+        margin=8,
+    ),
+
+    layout.Bsp(
+        border_width=2,
+        margin=8,
+    ),
+
+    layout.Matrix(
+        border_width=2,
+        margin=8,
+    ),
+
+    layout.RatioTile(
+        border_width=2,
+        margin=8,
+    ),
+
+    layout.Tile(
+        border_width=2,
+        margin=8,
+    ),
+    
+    layout.VerticalTile(
+        border_width=2,
+        margin=8,
+    ),
+
+    layout.Zoomy(
+        border_width=2,
+        margin=8,
+    ),
 ]
 
  ############################ Widget List ################################
