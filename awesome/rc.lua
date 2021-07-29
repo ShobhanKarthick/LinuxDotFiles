@@ -102,6 +102,22 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
+local month_calendar = awful.widget.calendar_popup.month()
+month_calendar:attach( mytextclock, 'tr' )
+month_calendar:toggle()
+
+-- Battery Percentage
+
+-- battery = wibox.widget{
+--	markup = 'This <i>is</i> a <b>textbox</b>!!!',
+--	markup = awful.spawn.with_shell("battery | cut -d ':' -f 2 | tr -d ' '"),
+--      align  = 'center',
+--	valign = 'center',
+--	widget = wibox.widget.textbox
+--}
+
+battery = awful.widget.watch("bash -c 'upower --enumerate | grep BAT | xargs upower --show-info | grep percent | cut -d : -f 2 '", 5)
+
 screen.connect_signal("request::wallpaper", function(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -179,14 +195,15 @@ screen.connect_signal("request::desktop_decoration", function(s)
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
             s.mytaglist,
-            s.mypromptbox,
+            -- s.mypromptbox,
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
+	        battery,
+            mykeyboardlayout,
             s.mylayoutbox,
         },
     }
@@ -562,9 +579,9 @@ end)
 beautiful.useless_gap = 3.5
 
 --autostart
-awful.spawn.with_shell("picom --config /home/lsw/.config/picom/picom.conf")
+-- awful.spawn.with_shell("picom --config /home/lsw/.config/picom/picom.conf")
 awful.spawn.with_shell("nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers")
--- awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("nm-applet")
 -- awful.spawn.with_shell("klipper")
 
 awful.keyboard.append_global_keybindings({
