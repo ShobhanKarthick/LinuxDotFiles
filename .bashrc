@@ -90,28 +90,9 @@ fi
 
 unset use_color safe_term match_lhs sh
 
-alias cp="cp -i"                          # confirm before overwriting something
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
-alias more=less
-
 xhost +local:root > /dev/null 2>&1
 
 complete -cf sudo
-
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
-
-shopt -s expand_aliases
-
-# export QT_SELECT=4
-
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
 
 #
 # # ex - archive extractor
@@ -138,23 +119,54 @@ ex ()
   fi
 }
 
+### SHOPT
+shopt -s autocd # change to named directory
+shopt -s cdspell # autocorrects cd misspellings
+shopt -s cmdhist # save multi-line commands in history as single line
+shopt -s dotglob
+shopt -s histappend # do not overwrite history
+shopt -s expand_aliases # expand aliases
+shopt -s checkwinsize # checks term size when bash regains control
+
+### EXPORTS
 export BROWSER=/usr/bin/firefox-developer-edition
+export EDITOR="vim"
 
 export R_LIBS="/mnt/LocalDisk1/Shobhan/Applications/R"
-
 export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
-
 export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+### ALIASES
+alias cp="cp -i"                          # confirm before overwriting something
+alias mv="mv -i"                          # confirm before overwriting something
+alias rm="rm -i"                          # confirm before overwriting something
+
+alias df='df -h'                          # human-readable sizes
+alias free='free -m'                      # show sizes in MB
+alias np='nano -w PKGBUILD'
+alias more=less
+
 alias vi=vim
 alias r=ranger
 alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 alias pacman="sudo pacman"
 alias battery="upower --enumerate | grep BAT | xargs upower --show-info | \grep percent"
+
+### CUSTOM CONFIGS
+wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
+if [[ $wmname == "LG3D" ]] 
+then
+	unset COLUMNS
+	unset LINES
+fi
+
+set -o vi
+
+### CUSTOM FUNCTIONS
 
 function mkcd (){
     mkdir $1
@@ -163,15 +175,6 @@ function mkcd (){
 
 function pac-search (){
 	pacman -Ss $1 | awk -f /mnt/LocalDisk1/Shobhan/Workspace/Linux/pacman-colored-search/colored-pacman-search.awk	
-	
 }
 
-export EDITOR="vim"
-set -o vi
 
-wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
-if [[ $wmname == "LG3D" ]] 
-then
-	unset COLUMNS
-	unset LINES
-fi
