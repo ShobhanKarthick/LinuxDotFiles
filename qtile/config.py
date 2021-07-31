@@ -197,13 +197,28 @@ layouts = [
         margin=8,
     ),
 ]
+ ############################ COlors ###############################
+
+
+colors = [["#282c34", "#282c34"],
+          ["#3d3f4b", "#434758"], # background for current screen tab
+          ["#ffffff", "#ffffff"], # font color for group names
+          ["#ff5555", "#ff5555"], # border line color for current tab
+          ["#320c47", "#320c47"], # border line color for 'other tabs' and color for 'odd widgets'
+          ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
+          ["#0a7268", "#0a7268"], # window name
+          ["#ecbbfb", "#ecbbfb"],
+          ["#222222", "#222222"],
+         ]
 
  ############################ Widget List ################################
 
 def widgetList():
     widgets = [
         widget.CurrentLayout(),
-        widget.GroupBox(),
+        widget.GroupBox(
+            padding_y=10,
+        ),
         widget.Prompt(),
         widget.WindowName(),
         widget.Chord(
@@ -213,39 +228,56 @@ def widgetList():
             name_transform=lambda name: name.upper(),
         ),
         widget.TextBox(
-            "default config",
+            "\U0001F4D3 Config",
             name="default",
             mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e vim ' + os.path.expanduser('~/.config/qtile/config.py')),},
+            foreground = colors[2],
+            background = colors[6],
         ),
-        widget.TextBox(
-            " | ",
-            name="pipe-separator",
+        widget.Sep(
+            linewidth = 0,
+            padding = 0,
         ),
-        widget.Clock(format='%a, %d %b %Y %I:%M %p'),
-        widget.TextBox(
-            " | ",
-            name="pipe-separator",
+        widget.Clock(
+            format='\U0001F4C5  %a, %d %b %Y %I:%M %p',
+            foreground = colors[2],
+            background = colors[3],
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 0,
         ),
         widget.Net(
             interface="wlp3s0",
-            format='Net {down} ↓↑ {up}'
+            format='\U0001F310 {down}  ↓↑ {up}',
+            padding = 5,
+            foreground = colors[2], 
+            background = colors[4],
+
         ),
-        widget.TextBox(
-            " | ",
-            name="pipe-separator",
-        ),        
+        widget.Sep(
+            linewidth = 0,
+            padding = 0,
+        ),
         widget.Battery(
-            format="Bat  {char} {percent:2.0%}  |  {hour:d}:{min:02d}",
+            format="\U0001F50B  {char} {percent:2.0%}  |  {hour:d}:{min:02d}",
             update_interval=30,
+            foreground = colors[2],
+            background = colors[5],
         ),
-        widget.TextBox(
-            " | ",
-            name="pipe-separator",
+        widget.Sep(
+            linewidth = 0,
+            padding = 0,
         ),
-        widget.Systray(),
+        widget.Systray(
+            foreground = colors[2],
+            background = colors[0],
+        ),
         widget.QuickExit(
             default_text="\u23FB",
             fontsize=15,
+            foreground = colors[2],
+            background = colors[0],
         ),
     ]
     return widgets
@@ -254,8 +286,9 @@ def widgetList():
 
 widget_defaults = dict(
     font='Roboto',
-    fontsize=12,
+    fontsize=13,
     padding=8,
+    background = colors[8]
 )
 extension_defaults = widget_defaults.copy()
 
