@@ -1,9 +1,10 @@
 Config { 
 
    -- appearance
-     font =         "xft:Roboto Mono:size=10:bold:antialias=true:hinting:true"
-   , bgColor =      "black"
-   , fgColor =      "#646464"
+     font =         "xft:Roboto:size=11:bold:antialias=true:hinting:true"
+   , additionalFonts = ["xft:Noto Sans:size=11:bold:antialias=true:hinting:true" ]
+   , bgColor =      "#212121"
+   , fgColor =      "#dddddd"
    , position =     Top
    , border =       BottomB
    , borderColor =  "#646464"
@@ -11,7 +12,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%battery% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %RJTT% | %date% || %kbd% "
+   , template = "%%  }{%% %battery% %% | %% %memory% %% | %% %dynnetwork% %% |%%  %date% %% | %% %kbd% %%"
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -35,45 +36,18 @@ Config {
    --   The --template option controls how the plugin is displayed. Text
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
-   , commands = 
+   , commands = [ 
 
-        -- weather monitor
-        [ Run Weather "RJTT" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
-                             ] 36000
+        -- time and date indicator 
+          Run Date           "<fc=#ABABAB>%a, %d %b %Y %T</fc>" "date" 10
 
         -- network activity monitor (dynamic interface resolution)
-        , Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
-                             , "--Low"      , "1000"       -- units: B/s
-                             , "--High"     , "5000"       -- units: B/s
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 10
+        , Run DynNetwork     [ "--template" , "Net <tx>kB/s <rx>kB/s" ] 10
 
-        -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%"
-                             , "--Low"      , "50"         -- units: %
-                             , "--High"     , "85"         -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 10
-
-        -- cpu core temperature monitor
-        , Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
-                             , "--Low"      , "70"        -- units: °C
-                             , "--High"     , "80"        -- units: °C
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 50
-                          
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"Mem: <usedratio>%"
+        , Run Memory         [ "--template" ,"RAM <usedratio>%"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "90"        -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
                              , "--high"     , "darkred"
                              ] 10
 
@@ -93,10 +67,6 @@ Config {
                                        -- charged status
                                        , "-i"	, "<fc=#006000>Charged</fc>"
                              ] 50
-
-        -- time and date indicator 
-        --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
 
         -- keyboard layout indicator
         , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
