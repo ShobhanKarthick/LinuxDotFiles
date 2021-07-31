@@ -167,5 +167,11 @@ function pac-search (){
 }
 
 export EDITOR="vim"
-
 set -o vi
+
+wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
+if [[ $wmname == "LG3D" ]] 
+then
+	unset COLUMNS
+	unset LINES
+fi
