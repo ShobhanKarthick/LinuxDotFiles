@@ -295,7 +295,7 @@ def widgetList():
  ########################### Widget Config ###############################
 
 widget_defaults = dict(
-    font='Roboto',
+    font='Noto Sans',
     fontsize=13,
     padding=8,
     background = colors[8]
