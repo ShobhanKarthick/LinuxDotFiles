@@ -4,6 +4,8 @@
 
 [[ $- != *i* ]] && return
 
+cd ~
+
 colors() {
 	local fgc bgc vals seq0
 
@@ -158,6 +160,17 @@ alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 alias pacman="sudo pacman"
 alias battery="upower --enumerate | grep BAT | xargs upower --show-info | \grep percent"
 
+alias cdh="cd ~"
+alias cdl="cd /mnt/LocalDisk/"
+alias cdl1="cd /mnt/LocalDisk1/"
+alias cdl2="cd /mnt/LocalDisk2/"
+alias cdli="cd /mnt/LocalDisk/IITM"
+
+alias cfb="vim ~/.bashrc"
+alias cfv="vim ~/.vimrc"
+alias cfq="vim ~/.config/qtile/config.py"
+alias cfa="vim ~/.config/awesome/rc.lua"
+
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
 if [[ $wmname == "LG3D" ]] 
@@ -173,6 +186,11 @@ set -o vi
 function mkcd (){
     mkdir $1
     cd $1
+}
+
+function cdsi () {
+    sem="/mnt/LocalDisk/IITM/Sem_$1"
+    cd $sem
 }
 
 function pac-search (){
