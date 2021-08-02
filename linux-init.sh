@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 
-pacman -S sudo sagemath octave code firefox-developer-edition alacritty telegram-desktop element-desktop nitrogen xmonad xmonad-contrib xmobar qtile lxappearance gimp inkscape okular gwenview qbittorrent ranger libreoffice-fresh vlc imagemagick texlive-most base-devel git upower ufw obs-studio vi vim neovim volumeicon network-manager-applet
+pacman -S sudo alacritty nitrogen wget curl xmonad xmonad-contrib xmobar qtile lxappearance qt5ct base-devel git upower ufw obs-studio vi vim neovim mupdf ranger volumeicon network-manager-applet flameshot scrot sagemath octave code bash-completion texlive-most firefox-developer-edition gimp inkscape libreoffice-fresh vlc imagemagick telegram-desktop element-desktop 
+
+
 
 git clone https://aur.archlinux.org/yay-git.git
 cd yay-git
