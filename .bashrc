@@ -165,6 +165,7 @@ alias cdl="cd /mnt/LocalDisk/"
 alias cdl1="cd /mnt/LocalDisk1/"
 alias cdl2="cd /mnt/LocalDisk2/"
 alias cdli="cd /mnt/LocalDisk/IITM"
+alias cdld="cd /mnt/LocalDisk1/Shobhan/Workspace/Linux/Linux_Dot_Files"
 
 alias cfb="vim ~/.bashrc"
 alias cfv="vim ~/.vimrc"
