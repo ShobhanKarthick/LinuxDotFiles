@@ -1,4 +1,9 @@
-#
+#    _               _
+#   | |__   __ _ ___| |__  _ __ ___
+#   | '_ \ / _` / __| '_ \| '__/ __|
+#  _| |_) | (_| \__ \ | | | | | (__
+# (_)_.__/ \__,_|___/_| |_|_|  \___|
+# 
 # ~/.bashrc
 #
 
@@ -138,6 +143,8 @@ export R_LIBS="/mnt/LocalDisk1/Shobhan/Applications/R"
 export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
 export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
+export PATH="/usr/local/gromacs/bin:$PATH"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -171,6 +178,8 @@ alias cfb="vim ~/.bashrc"
 alias cfv="vim ~/.vimrc"
 alias cfq="vim ~/.config/qtile/config.py"
 alias cfa="vim ~/.config/awesome/rc.lua"
+alias cfx="vim ~/.xmonad/xmonad.hs"
+alias cfxb="vim ~/.xmobarrc"
 
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
@@ -197,5 +206,4 @@ function cdsi () {
 function pac-search (){
 	pacman -Ss $1 | awk -f /mnt/LocalDisk1/Shobhan/Workspace/Linux/pacman-colored-search/colored-pacman-search.awk	
 }
-
 
