@@ -1,3 +1,10 @@
+"          _
+"   __   _(_)_ __ ___  _ __ ___
+"   \ \ / / | '_ ` _ \| '__/ __|
+"    \ V /| | | | | | | | | (__
+"   (_)_/ |_|_| |_| |_|_|  \___|
+" 
+
 let mapleader = " "
 syntax on
 filetype on
@@ -7,6 +14,7 @@ filetype plugin on
 set number 
 set relativenumber
 set incsearch
+set nohlsearch
 
 " Indentation 
 set tabstop=4 softtabstop=4
@@ -14,7 +22,9 @@ set shiftwidth=4
 set expandtab
 set smartindent
 
+set pastetoggle=<F9>
 set scrolloff=8
+set showcmd
 
 call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -25,7 +35,6 @@ call plug#end()
 let g:coc_global_extensions = [
             \ 'coc-json', 
             \ 'coc-tsserver',
-            \ 'coc-snippets',
             \ 'coc-eslint',
             \ 'coc-prettier',
             \ 'coc-pairs',
@@ -43,7 +52,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " NERDTree Config
-autocmd VimEnter * NERDTree | wincmd p  " Start VIM with NERDTree and with focus on file
+" autocmd VimEnter * NERDTree | wincmd p  " Start VIM with NERDTree and with focus on file
 
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTreeFocus<CR>
