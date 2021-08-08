@@ -1,0 +1,6 @@
+super + Return 
+    $TERMINAL
+super + u
+    dmenu_run
+super + period
+    emoji
