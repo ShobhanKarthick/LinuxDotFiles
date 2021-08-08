@@ -118,7 +118,7 @@ keys = [
 
     Key([mod, "shift"], "s", lazy.spawn("flameshot gui"), 
         desc="Launch flameshot screenshot tool"),
-    Key([mod], "f", lazy.spawn("firefox-developer-edition"),
+    Key([mod], "f", lazy.spawn("firefox-nightly"),
         desc="Launch Firefox Dev"),
 
 ]

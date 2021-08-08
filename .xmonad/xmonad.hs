@@ -41,7 +41,7 @@ myMod = mod4Mask                         -- Super key is the defaut mod key
 
 myTerminal = "alacritty"                 -- Sets Alacritty as the default terminal emulator
 myEditor = "vim"                         -- Sets VIM as the default editor
-myBrowser = "firefox-developer-edition"  -- Sets Firfox Dev as default browser
+myBrowser = "firefox-nightly"  -- Sets Firfox Dev as default browser
 
 myBorderWidth = 2
 myNormColor   = "#dddddd"   -- Border color of normal windows
