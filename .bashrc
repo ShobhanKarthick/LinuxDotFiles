@@ -136,7 +136,7 @@ shopt -s expand_aliases # expand aliases
 shopt -s checkwinsize # checks term size when bash regains control
 
 ### EXPORTS
-export BROWSER=/usr/bin/firefox-developer-edition
+export BROWSER=/usr/bin/firefox-nightly
 export EDITOR="vim"
 
 export R_LIBS="/mnt/LocalDisk1/Shobhan/Applications/R"
@@ -144,6 +144,7 @@ export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
 export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
 export PATH="/usr/local/gromacs/bin:$PATH"
+export PATH="/home/lsw/.scripts:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -192,18 +193,6 @@ fi
 set -o vi
 
 ### CUSTOM FUNCTIONS
-
-function mkcd (){
-    mkdir $1
-    cd $1
-}
-
-function cdsi () {
-    sem="/mnt/LocalDisk/IITM/Sem_$1"
-    cd $sem
-}
-
-function pac-search (){
-	pacman -Ss $1 | awk -f /mnt/LocalDisk1/Shobhan/Workspace/Linux/pacman-colored-search/colored-pacman-search.awk	
-}
+source ~/.scripts/mkcd
+source ~/.scripts/cdsi
 

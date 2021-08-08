@@ -1,0 +1,6 @@
+#!/usr/bin/bash 
+
+function cdsi () {
+    sem="/mnt/LocalDisk/IITM/Sem_$1"
+    cd $sem
+}

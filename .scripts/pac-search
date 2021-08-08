@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+pacman -Ss $1 | awk -f /mnt/LocalDisk1/Shobhan/Workspace/Linux/pacman-colored-search/colored-pacman-search.awk

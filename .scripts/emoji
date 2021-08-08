@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+cat ./emoji-test.txt | dmenu -l 30 | grep -o "# .\+ E" | tr -d "E" | tr -d "# " | xclip -sel clip
+
+
