@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+wget -q https://calendar.google.com/calendar/ical/be19b009%40smail.iitm.ac.in/private-3093bd323ad8ee1ede8b3ed510dba50e/basic.ics -O ~/.cache/basic.ics
+rm -f ~/.local/share/calcurse/apts
+calcurse -i ~/.cache/basic.ics

@@ -1,0 +1,8 @@
+#!/usr/bin/bash 
+
+msg=$(calcurse --next | tail -n 1 | cut -d ] -f 2 | tr -d " "); 
+notify-send "$msg" "in 10 mins..."
+sleep 300
+notify-send -t 0 "$msg" "in 5 mins..."
+exit 0
+
