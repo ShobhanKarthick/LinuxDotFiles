@@ -184,6 +184,9 @@ alias cfq="vim ~/.config/qtile/config.py"
 alias cfa="vim ~/.config/awesome/rc.lua"
 alias cfx="vim ~/.xmonad/xmonad.hs"
 alias cfxb="vim ~/.xmobarrc"
+alias cfd="vim ~/.config/dwm/config.def.h"
+
+alias gitpat="cat ~/.config/PAT | tr -d "\n" | xclip -sel clip"
 
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
