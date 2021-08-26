@@ -1,6 +1,7 @@
 # LinuxDotFiles
 
 - Alacritty
+- DWM
 - XMonad
 - AwesomeWM
 - Qtile 
