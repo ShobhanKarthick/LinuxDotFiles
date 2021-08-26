@@ -136,6 +136,7 @@ shopt -s expand_aliases # expand aliases
 shopt -s checkwinsize # checks term size when bash regains control
 
 ### EXPORTS
+export TERMINAL="alacritty"
 export BROWSER=/usr/bin/firefox-nightly
 export EDITOR="vim"
 
@@ -145,6 +146,8 @@ export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
 export PATH="/usr/local/gromacs/bin:$PATH"
 export PATH="/home/lsw/.scripts:$PATH"
+export PATH="/home/lsw/.scripts/emoji:$PATH"
+export PATH="/home/lsw/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

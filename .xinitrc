@@ -37,7 +37,8 @@ xset r rate 300 60
 setxkbmap -option caps:escape      # Change Caps as additional Esc
 # caps:escape_shifted_capslock         # Use Caps as additional Esc while Shift + Caps = Caps 
 
+PATH="$HOME/.scripts:$PATH"
 sxhkd &
 
-exec qtile start  
+exec dwm 
 
