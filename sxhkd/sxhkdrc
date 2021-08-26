@@ -1,6 +1,4 @@
 super + Return 
-    $TERMINAL
-super + u
-    dmenu_run
+    alacritty
 super + period
     emoji
