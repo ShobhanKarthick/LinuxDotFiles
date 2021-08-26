@@ -25,31 +25,33 @@ set smartindent
 set pastetoggle=<F9>
 set scrolloff=8
 set showcmd
+set wildmenu
 
 call plug#begin('~/.vim/plugged')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'preservim/nerdtree'
 call plug#end()
 
 " Coc Config 
-let g:coc_global_extensions = [
-            \ 'coc-json', 
-            \ 'coc-tsserver',
-            \ 'coc-eslint',
-            \ 'coc-prettier',
-            \ 'coc-pairs',
-            \]
+" let g:coc_global_extensions = [
+"             \ 'coc-json', 
+"             \ 'coc-tsserver',
+"             \ 'coc-eslint',
+"             \ 'coc-prettier',
+"             \ 'coc-pairs',
+"             \]
 
-inoremap <silent><expr> <C-@> coc#refresh()
+" inoremap <silent><expr> <C-@> coc#refresh()
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" " GoTo code navigation.
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
 " NERDTree Config
 " autocmd VimEnter * NERDTree | wincmd p  " Start VIM with NERDTree and with focus on file
