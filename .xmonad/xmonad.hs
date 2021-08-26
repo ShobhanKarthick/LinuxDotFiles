@@ -107,13 +107,15 @@ main = do
     , ("M-m", windows W.focusMaster)  -- Move focus to the master window
     , ("M-j", windows W.focusDown)    -- Move focus to the next window
     , ("M-k", windows W.focusUp)      -- Move focus to the prev window
-    , ("M-S-h", dwmpromote) -- Swap the focused window and the master window
+    , ("M-S-h", dwmpromote)           -- Swap the focused window and the master window
     , ("M-S-j", windows W.swapDown)   -- Swap focused window with next window
     , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
     , ("M-<Backspace>", promote)      -- Moves focused window to master, others maintain order
     , ("M-S-<Tab>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
     , ("M-C-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
 
+    , ("M-,", sendMessage(IncMasterN 1))
+    , ("M-S-,", sendMessage(IncMasterN (-1)))
     ]
 
 myLayout = avoidStruts(tiled 
