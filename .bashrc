@@ -171,7 +171,6 @@ alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 alias pacman="sudo pacman"
 alias battery="upower --enumerate | grep BAT | xargs upower --show-info | \grep percent"
 
-alias cdh="cd ~"
 alias cdl="cd /mnt/LocalDisk/"
 alias cdl1="cd /mnt/LocalDisk1/"
 alias cdl2="cd /mnt/LocalDisk2/"
@@ -185,6 +184,7 @@ alias cfa="vim ~/.config/awesome/rc.lua"
 alias cfx="vim ~/.xmonad/xmonad.hs"
 alias cfxb="vim ~/.xmobarrc"
 alias cfd="vim ~/.config/dwm/config.def.h"
+alias cfdw="cd ~/.config/dwmblocks/"
 
 alias gitpat="cat ~/.config/PAT | tr -d "\n" | xclip -sel clip"
 
