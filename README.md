@@ -2,6 +2,14 @@
 
 - Alacritty
 - DWM
+  - vanity-gaps-combo
+  - swallow
+  - pertag
+  - DWM blocks
+  - hide vacant tags
+  - cyclelayouts
+  - autostart
+  - moveplace / exresize
 - XMonad
 - AwesomeWM
 - Qtile 
