@@ -5,10 +5,10 @@
 # Also see ../daemons/pulse_daemon.sh
 pacmd list-sinks | awk '
     BEGIN {
-        ICONsn = "\x0c\x0b" # headphone unplugged, not muted
-        ICONsm = "\x0d\x0b" # headphone unplugged, muted
-        ICONhn = "\x0c\x0b" # headphone plugged in, not muted
-        ICONhm = "\x0d\x0b" # headphone plugged in, muted
+        ICONsn = $'\360\237\216\247' # headphone unplugged, not muted
+        ICONsm = $'\360\237\224\207' # headphone unplugged, muted
+        ICONhn = $'\360\237\216\247' # headphone plugged in, not muted
+        ICONhm = $'\360\237\224\207' # headphone plugged in, muted
     }
     f {
         if ($1 == "muted:" && $2 == "yes") {
