@@ -170,6 +170,7 @@ alias r=ranger
 alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 alias pacman="sudo pacman"
 alias battery="upower --enumerate | grep BAT | xargs upower --show-info | \grep percent"
+alias ytdl="youtube-dl -f 'best'"
 
 alias cdl="cd /mnt/LocalDisk/"
 alias cdl1="cd /mnt/LocalDisk1/"
