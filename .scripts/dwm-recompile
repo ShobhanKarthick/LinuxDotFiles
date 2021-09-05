@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+dwmDir="$HOME/.config/dwm"
+
+[ -f  "$dwmDir/config.h" ] && rm "$dwmDir/config.h"
+sudo make -C $dwmDir
+sudo make -C $dwmDir clean install
