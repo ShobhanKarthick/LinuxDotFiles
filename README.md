@@ -18,6 +18,11 @@
 - Lf
 - .bashrc
 - .vimrc
+    - tpope/commentary
+    - tpope/vim-surround
+    - dense-analysis/ale
+    - preservim/nerdtree
+    - puremourning/vimspector   
 - .xinitrc
 - .xmobarrc
 - Code OSS Init
