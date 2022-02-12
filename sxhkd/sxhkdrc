@@ -1,10 +1,7 @@
-super + Return 
-    alacritty
 super + period
     emoji
 super + shift + s
     flameshot gui
 {XF86AudioRaiseVolume, XF86AudioLowerVolume}
     amixer -q sset Master 1%{+,-}; \
-	notify-send -u low $(amixer -D pulse sget Master | grep -i left: | grep -oP "\\d+%")
-
+    volume-notify
