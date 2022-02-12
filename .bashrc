@@ -137,17 +137,21 @@ shopt -s checkwinsize # checks term size when bash regains control
 
 ### EXPORTS
 export TERMINAL="alacritty"
-export BROWSER=/usr/bin/firefox-nightly
-export EDITOR="vim"
+export BROWSER=/usr/bin/firefox-developer-edition
+export EDITOR="nvim"
 
 export R_LIBS="/mnt/LocalDisk1/Shobhan/Applications/R"
 export R_LIBS_USER="/mnt/LocalDisk1/Shobhan/Applications/R"
 export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 export PATH="/usr/local/gromacs/bin:$PATH"
 export PATH="/home/lsw/.scripts:$PATH"
 export PATH="/home/lsw/.scripts/emoji:$PATH"
 export PATH="/home/lsw/.local/bin:$PATH"
+
+export PATH=$ANDROID_HOME:$PATH
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -165,7 +169,7 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
-alias vi=vim
+alias vi=nvim
 alias r=ranger
 alias wallpaper="nitrogen --set-zoom-fill --random /mnt/LocalDisk2/Wallpapers"
 alias pacman="sudo pacman"
@@ -178,16 +182,20 @@ alias cdl2="cd /mnt/LocalDisk2/"
 alias cdli="cd /mnt/LocalDisk/IITM"
 alias cdld="cd /mnt/LocalDisk1/Shobhan/Workspace/Linux/Linux_Dot_Files"
 
-alias cfb="vim ~/.bashrc"
-alias cfv="vim ~/.vimrc"
-alias cfq="vim ~/.config/qtile/config.py"
-alias cfa="vim ~/.config/awesome/rc.lua"
-alias cfx="vim ~/.xmonad/xmonad.hs"
-alias cfxb="vim ~/.xmobarrc"
-alias cfd="vim ~/.config/dwm/config.def.h"
+alias cfb="nvim ~/.bashrc"
+alias cfv="nvim ~/.config/nvim/init.vim"
+alias cfq="nvim ~/.config/qtile/config.py"
+alias cfa="nvim ~/.config/awesome/rc.lua"
+alias cfx="nvim ~/.xmonad/xmonad.hs"
+alias cfxb="nvim ~/.xmobarrc"
+alias cfd="nvim ~/.config/dwm/config.def.h"
+alias cfs="nvim ~/.config/st/config.def.h"
 alias cfdw="cd ~/.config/dwmblocks/"
 
 alias gitpat="cat ~/.config/PAT | tr -d "\n" | xclip -sel clip"
+alias pinga="ping archlinux.org"
+alias drone="dragon-drag-and-drop"
+alias btctl="bluetoothctl"
 
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
