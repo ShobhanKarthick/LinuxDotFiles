@@ -11,6 +11,13 @@
     - pertag-6.2
     - push_no_master-6.2
 
+- St terminal
+     - alpha
+     - anysize
+     - blinking_cursor
+     - ligatures_alpha_scrollback
+     - scrollback
+
 - XMonad
 - AwesomeWM
 - Qtile 
