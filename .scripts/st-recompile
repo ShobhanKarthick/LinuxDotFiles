@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+stDir="$HOME/.config/st"
+
+[ -f  "$stDir/config.h" ] && rm "$stDir/config.h"
+sudo make -C $stDir
+sudo make -C $stDir clean install
