@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+notDam=$(ps -auxc | grep "notification" | wc -l) 
+
+[[ $notDam -eq 1 ]] && killall notification-daemon
+notify-send -u low $(amixer get Master | grep -i "left:" | grep -oP "\\d+%")
+

@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+charge=$(cat /sys/class/power_supply/BAT0/capacity)
+status=$(cat /sys/class/power_supply/BAT0/status)
+notDam=$(ps -auxc | grep "notification" | wc -l)
+
+[[ $notDam -eq 1 ]] && killall notification-daemon
+
+[[ $charge -le 15 && $status == "Discharging" ]] && notify-send -u critical "Connect your charger now!" && exit
+[[ $charge -le 25 && $status == "Discharging" ]] && notify-send "Connect your charger now!" && exit
