@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+notDam=$(ps -auxc | grep "notification" | wc -l)
+
+[[ $notDam -eq 1 ]] && killall notification-daemon
+
 wget -q https://calendar.google.com/calendar/ical/be19b009%40smail.iitm.ac.in/private-3093bd323ad8ee1ede8b3ed510dba50e/basic.ics -O ~/.cache/basic.ics
 rm -f ~/.local/share/calcurse/apts
-calcurse -i ~/.cache/basic.ics
+calcurse -i ~/.cache/basic.ics > /dev/null 2>&1
+notify-send "Smail events fetched now!" "be19b009@smail.iitm.ac.in"
