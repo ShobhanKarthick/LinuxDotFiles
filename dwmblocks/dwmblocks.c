@@ -1,320 +1,247 @@
-#include <errno.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <X11/Xlib.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+#include<unistd.h>
+#include<signal.h>
+#include<sys/wait.h>
+#ifndef NO_X
+#include<X11/Xlib.h>
+#endif
+#ifdef __OpenBSD__
+#define SIGPLUS			SIGUSR1+1
+#define SIGMINUS		SIGUSR1-1
+#else
+#define SIGPLUS			SIGRTMIN
+#define SIGMINUS		SIGRTMIN
+#endif
+#define LENGTH(X)               (sizeof(X) / sizeof (X[0]))
+#define CMDLENGTH		50
+#define MIN( a, b ) ( ( a < b) ? a : b )
+#define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
 
-#define NILL                            INT_MIN
-#define LOCKFILE                        "/var/local/dwmblocks/dwmblocks.pid"
-
-#define LENGTH(X)                       (sizeof X / sizeof X[0])
-
-#define DELIMITERLENGTH                 (sizeof delimiter)
-#define STATUSLENGTH                    (LENGTH(blocks) * (CMDOUTLENGTH + DELIMITERLENGTH) + 1)
-
-#include "config.h"
-
-_Static_assert(INTERVALs >= 0, "INTERVALs must be greater than or equal to 0");
-_Static_assert(INTERVALn >= 0 && INTERVALn <= 999999999, "INTERVALn must be between 0 and 999999999");
-
-static void buttonhandler(int sig, siginfo_t *info, void *ucontext);
-static void cleanup(void);
-static void setupsignals(void);
-static void sighandler(int sig, siginfo_t *si, void *ucontext);
-static void statusloop(void);
-static void termhandler(int sig);
-static void updateblock(Block *block, int sigval);
-static void updatestatus(void);
-static void writepid(void);
-
-static Block *dirtyblock;
+typedef struct {
+	char* icon;
+	char* command;
+	unsigned int interval;
+	unsigned int signal;
+} Block;
+#ifndef __OpenBSD__
+void dummysighandler(int num);
+#endif
+void getcmds(int time);
+void getsigcmds(unsigned int signal);
+void setupsignals();
+void sighandler(int signum, siginfo_t *si, void *ucontext);
+int getstatus(char *str, char *last);
+void statusloop();
+void termhandler();
+void chldhandler();
+void pstdout();
+#ifndef NO_X
+void setroot();
+static void (*writestatus) () = setroot;
+static int setupX();
 static Display *dpy;
-static sigset_t blocksigmask;
+static int screen;
+static Window root;
+#else
+static void (*writestatus) () = pstdout;
+#endif
 
-void
-buttonhandler(int sig, siginfo_t *info, void *ucontext)
+
+#include "blocks.h"
+
+static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
+static char statusstr[2][STATUSLENGTH];
+static int statusContinue = 1;
+static int returnStatus = 0;
+
+//opens process *cmd and stores output in *output
+void getcmd(const Block *block, char *output)
 {
-        sig = info->si_value.sival_int >> 8;
-        for (Block *block = blocks; block->pathu; block++)
-                if (block->signal == sig)
-                        switch (fork()) {
-                                case -1:
-                                        perror("buttonhandler - fork");
-                                        break;
-                                case 0:
-                                {
-                                        char button[] = { '0' + (info->si_value.sival_int & 0xff), '\0' };
-                                        char *arg[] = { block->pathc, button, NULL };
-
-                                        setsid();
-                                        execv(arg[0], arg);
-                                        perror("buttonhandler - child - execv");
-                                        _exit(127);
-                                }
-                        }
+	if (block->signal)
+		*output++ = block->signal;
+	strcpy(output, block->icon);
+	FILE *cmdf = popen(block->command, "r");
+	if (!cmdf)
+		return;
+	int i = strlen(block->icon);
+	fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
+	i = strlen(output);
+	if (i == 0) {
+		//return if block and command output are both empty
+		pclose(cmdf);
+		return;
+	}
+	//only chop off newline if one is present at the end
+	i = output[i-1] == '\n' ? i-1 : i;
+	if (delim[0] != '\0') {
+		strncpy(output+i, delim, delimLen); 
+	}
+	else
+		output[i++] = '\0';
+	pclose(cmdf);
 }
 
-void
-cleanup(void)
+void getcmds(int time)
 {
-        unlink(LOCKFILE);
-        XStoreName(dpy, DefaultRootWindow(dpy), "");
-        XCloseDisplay(dpy);
+	const Block* current;
+	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+		current = blocks + i;
+		if ((current->interval != 0 && time % current->interval == 0) || time == -1)
+			getcmd(current,statusbar[i]);
+	}
 }
 
-void
-setupsignals(void)
+void getsigcmds(unsigned int signal)
 {
-        struct sigaction sa;
-
-        /* populate blocksigmask and check validity of signals */
-        sigemptyset(&blocksigmask);
-        sigaddset(&blocksigmask, SIGHUP);
-        sigaddset(&blocksigmask, SIGINT);
-        sigaddset(&blocksigmask, SIGTERM);
-        for (Block *block = blocks; block->pathu; block++) {
-                if (block->signal <= 0)
-                        continue;
-                if (block->signal > SIGRTMAX - SIGRTMIN) {
-                        fprintf(stderr, "Error: SIGRTMIN + %d exceeds SIGRTMAX.\n", block->signal);
-                        unlink(LOCKFILE);
-                        XCloseDisplay(dpy);
-                        exit(2);
-                }
-                sigaddset(&blocksigmask, SIGRTMIN + block->signal);
-        }
-
-        /* setup signal handlers */
-        /* to handle HUP, INT and TERM */
-        sa.sa_flags = SA_RESTART;
-        sigemptyset(&sa.sa_mask);
-        sa.sa_handler = termhandler;
-        sigaction(SIGHUP, &sa, NULL);
-        sigaction(SIGINT, &sa, NULL);
-        sigaction(SIGTERM, &sa, NULL);
-
-        /* to ignore unused realtime signals */
-        // sa.sa_flags = SA_RESTART;
-        // sigemptyset(&sa.sa_mask);
-        sa.sa_handler = SIG_IGN;
-        for (int i = SIGRTMIN + 1; i <= SIGRTMAX; i++)
-                sigaction(i, &sa, NULL);
-
-        /* to prevent forked children from becoming zombies */
-        sa.sa_flags = SA_NOCLDSTOP | SA_NOCLDWAIT | SA_RESTART;
-        // sigemptyset(&sa.sa_mask);
-        sa.sa_handler = SIG_IGN;
-        sigaction(SIGCHLD, &sa, NULL);
-
-        /* to handle signals generated by dwm on click events */
-        sa.sa_flags = SA_RESTART | SA_SIGINFO;
-        // sigemptyset(&sa.sa_mask);
-        sa.sa_sigaction = buttonhandler;
-        sigaction(SIGRTMIN, &sa, NULL);
-
-        /* to handle update signals for individual blocks */
-        sa.sa_flags = SA_NODEFER | SA_RESTART | SA_SIGINFO;
-        sa.sa_mask = blocksigmask;
-        sa.sa_sigaction = sighandler;
-        for (Block *block = blocks; block->pathu; block++)
-                if (block->signal > 0)
-                        sigaction(SIGRTMIN + block->signal, &sa, NULL);
+	const Block *current;
+	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+		current = blocks + i;
+		if (current->signal == signal)
+			getcmd(current,statusbar[i]);
+	}
 }
 
-void
-sighandler(int sig, siginfo_t *info, void *ucontext)
+void setupsignals()
 {
-        sig -= SIGRTMIN;
-        for (Block *block = blocks; block->pathu; block++)
-                if (block->signal == sig)
-                        updateblock(block, info->si_value.sival_int);
-        updatestatus();
+	struct sigaction sa = { .sa_sigaction = sighandler, .sa_flags = SA_SIGINFO };
+#ifndef __OpenBSD__
+	    /* initialize all real time signals with dummy handler */
+    for (int i = SIGRTMIN; i <= SIGRTMAX; i++) {
+        signal(i, dummysighandler);
+		sigaddset(&sa.sa_mask, i);
+	}
+#endif
+
+	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+		if (blocks[i].signal > 0)
+			sigaction(SIGMINUS+blocks[i].signal, &sa, NULL);
+	}
+
 }
 
-void
-statusloop(void)
+int getstatus(char *str, char *last)
 {
-        int i;
-        struct timespec t;
-
-        sigprocmask(SIG_BLOCK, &blocksigmask, NULL);
-        for (Block *block = blocks; block->pathu; block++)
-                if (block->interval >= 0)
-                        updateblock(block, NILL);
-        for (i = 1; ; i++) {
-                updatestatus();
-                sigprocmask(SIG_UNBLOCK, &blocksigmask, NULL);
-                t.tv_sec = INTERVALs, t.tv_nsec = INTERVALn;
-                while (nanosleep(&t, &t) == -1);
-                sigprocmask(SIG_BLOCK, &blocksigmask, NULL);
-                for (Block *block = blocks; block->pathu; block++)
-                        if (block->interval > 0 && i % block->interval == 0)
-                                updateblock(block, NILL);
-        }
+	strcpy(last, str);
+	str[0] = '\0';
+	for (unsigned int i = 0; i < LENGTH(blocks); i++)
+		strcat(str, statusbar[i]);
+	str[strlen(str)-strlen(delim)] = '\0';
+	return strcmp(str, last);//0 if they are the same
 }
 
-void
-termhandler(int sig)
+#ifndef NO_X
+void setroot()
 {
-        cleanup();
-        exit(0);
+	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
+		return;
+	XStoreName(dpy, root, statusstr[0]);
+	XFlush(dpy);
 }
 
-void
-updateblock(Block *block, int sigval)
+int setupX()
 {
-        int fd[2];
+	dpy = XOpenDisplay(NULL);
+	if (!dpy) {
+		fprintf(stderr, "dwmblocks: Failed to open display\n");
+		return 0;
+	}
+	screen = DefaultScreen(dpy);
+	root = RootWindow(dpy, screen);
+	return 1;
+}
+#endif
 
-        if (pipe(fd) == -1) {
-                perror("updateblock - pipe");
-                cleanup();
-                exit(1);
-        }
-        switch (fork()) {
-                case -1:
-                        perror("updateblock - fork");
-                        close(fd[0]);
-                        close(fd[1]);
-                        cleanup();
-                        exit(1);
-                case 0:
-                        close(fd[0]);
-                        if (fd[1] != STDOUT_FILENO) {
-                                if (dup2(fd[1], STDOUT_FILENO) != STDOUT_FILENO) {
-                                        perror("updateblock - child - dup2");
-                                        close(fd[1]);
-                                        exit(1);
-                                }
-                                close(fd[1]);
-                        }
-                        if (sigval == NILL) {
-                                char *arg[] = { block->pathu, NULL };
-
-                                execv(arg[0], arg);
-                        } else {
-                                char buf[12];
-                                char *arg[] = { block->pathu, buf, NULL };
-
-                                snprintf(buf, sizeof buf, "%d", sigval);
-                                execv(arg[0], arg);
-                        }
-                        perror("updateblock - child - execv");
-                        _exit(127);
-                default:
-                {
-                        size_t trd = 0;
-                        ssize_t rd;
-
-                        close(fd[1]);
-                        do
-                                rd = read(fd[0], block->curtext + trd, CMDOUTLENGTH - trd);
-                        while (rd > 0 && (trd += rd) < CMDOUTLENGTH);
-                        if (rd == -1) {
-                                perror("updateblock - read");
-                                close(fd[0]);
-                                cleanup();
-                                exit(1);
-                        }
-                        close(fd[0]);
-
-                        block->curtext[trd] = '\0';
-                        if (memcmp(block->curtext, block->prvtext, trd + 1) != 0) {
-                                memcpy(block->prvtext, block->curtext, trd + 1);
-                                if (!dirtyblock || block < dirtyblock)
-                                        dirtyblock = block;
-                        }
-                        if (trd == 0)
-                                block->length = 0;
-                        else {
-                                if (block->curtext[trd - 1] == '\n')
-                                        trd--;
-                                if (block->pathc)
-                                        block->curtext[trd++] = block->signal;
-                                memcpy(block->curtext + trd, delimiter, DELIMITERLENGTH);
-                                block->length = trd + DELIMITERLENGTH;
-                        }
-                }
-        }
+void pstdout()
+{
+	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
+		return;
+	printf("%s\n",statusstr[0]);
+	fflush(stdout);
 }
 
-void
-updatestatus(void)
+
+void statusloop()
 {
-        static char statustext[STATUSLENGTH];
-        char *s = statustext;
-        Block *block;
-
-        if (!dirtyblock)
-                return;
-        for (block = blocks; block < dirtyblock; block++)
-                s += block->length;
-        for (; block->pathu; block++) {
-                memcpy(s, block->curtext, block->length);
-                s += block->length;
-        }
-        s[s == statustext ? 0 : -DELIMITERLENGTH] = '\0';
-        dirtyblock = NULL;
-
-        XStoreName(dpy, DefaultRootWindow(dpy), statustext);
-        XSync(dpy, False);
+	setupsignals();
+	int i = 0;
+	getcmds(-1);
+	while (1) {
+		getcmds(i++);
+		writestatus();
+		if (!statusContinue)
+			break;
+		sleep(1.0);
+	}
 }
 
-void
-writepid(void)
+#ifndef __OpenBSD__
+/* this signal handler should do nothing */
+void dummysighandler(int signum)
 {
-        int fd;
-        struct flock fl;
+    return;
+}
+#endif
 
-        if ((fd = open(LOCKFILE, O_RDWR | O_CREAT | O_CLOEXEC,
-                       S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) == -1) {
-                perror("writepid - open");
-                exit(1);
-        }
-        fl.l_type = F_WRLCK;
-        fl.l_whence = SEEK_SET;
-        fl.l_start = 0;
-        fl.l_len = 0;
-        if (fcntl(fd, F_SETLK, &fl) == -1) {
-                if (errno == EACCES || errno == EAGAIN) {
-                        fputs("Error: another instance of dwmblocks is already running.\n", stderr);
-                        exit(2);
-                }
-                perror("writepid - fcntl");
-                close(fd);
-                exit(1);
-        }
-        if (ftruncate(fd, 0) == -1) {
-                perror("writepid - ftruncate");
-                close(fd);
-                exit(1);
-        }
-        if (dprintf(fd, "%ld", (long)getpid()) < 0) {
-                perror("writepid - dprintf");
-                close(fd);
-                exit(1);
-        }
+void sighandler(int signum, siginfo_t *si, void *ucontext)
+{
+	if (si->si_value.sival_int) {
+		pid_t parent = getpid();
+		if (fork() == 0) {
+#ifndef NO_X
+			if (dpy)
+				close(ConnectionNumber(dpy));
+#endif
+			int i;
+			for (i = 0; i < LENGTH(blocks) && blocks[i].signal != signum-SIGRTMIN; i++);
+
+			char shcmd[1024];
+			sprintf(shcmd, "%s; kill -%d %d", blocks[i].command, SIGRTMIN+blocks[i].signal, parent);
+			char *cmd[] = { "/bin/sh", "-c", shcmd, NULL };
+			char button[2] = { '0' + si->si_value.sival_int, '\0' };
+			setenv("BUTTON", button, 1);
+			setsid();
+			execvp(cmd[0], cmd);
+			perror(cmd[0]);
+			exit(EXIT_SUCCESS);
+		}
+	} else {
+		getsigcmds(signum-SIGPLUS);
+		writestatus();
+	}
 }
 
-int
-main(int argc, char *argv[])
+void termhandler()
 {
-        int xfd;
+	statusContinue = 0;
+}
 
-        writepid();
-        if (!(dpy = XOpenDisplay(NULL))) {
-                fputs("Error: could not open display.\n", stderr);
-                unlink(LOCKFILE);
-                return 1;
-        }
-        xfd = ConnectionNumber(dpy);
-        fcntl(xfd, F_SETFD, fcntl(xfd, F_GETFD) | FD_CLOEXEC);
-        setupsignals();
-        statusloop();
-        cleanup();
-        return 0;
+void chldhandler()
+{
+	while (0 < waitpid(-1, NULL, WNOHANG));
+}
+
+int main(int argc, char** argv)
+{
+	for (int i = 0; i < argc; i++) {//Handle command line arguments
+		if (!strcmp("-d",argv[i]))
+			strncpy(delim, argv[++i], delimLen);
+		else if (!strcmp("-p",argv[i]))
+			writestatus = pstdout;
+	}
+#ifndef NO_X
+	if (!setupX())
+		return 1;
+#endif
+	delimLen = MIN(delimLen, strlen(delim));
+	delim[delimLen++] = '\0';
+	signal(SIGTERM, termhandler);
+	signal(SIGINT, termhandler);
+	signal(SIGCHLD, chldhandler);
+	statusloop();
+#ifndef NO_X
+	XCloseDisplay(dpy);
+#endif
+	return 0;
 }
