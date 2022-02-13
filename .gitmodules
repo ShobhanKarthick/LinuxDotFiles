@@ -4,3 +4,6 @@
 [submodule "dwm"]
 	path = dwm
 	url = https://github.com/ShobhanKarthick/dwm.git
+[submodule "st"]
+	path = st
+	url = https://github.com/ShobhanKarthick/st.git
