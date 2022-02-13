@@ -147,8 +147,8 @@ export R_LIBS_SITE="/mnt/LocalDisk1/Shobhan/Applications/R"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 export PATH="/usr/local/gromacs/bin:$PATH"
-export PATH="/home/lsw/.scripts:$PATH"
-export PATH="/home/lsw/.scripts/emoji:$PATH"
+export PATH="/home/lsw/.scripts/:$PATH"
+export PATH="/home/lsw/.scripts/statusbar/:$PATH"
 export PATH="/home/lsw/.local/bin:$PATH"
 
 export PATH=$ANDROID_HOME:$PATH
@@ -165,7 +165,6 @@ alias mv="mv -i"                          # confirm before overwriting something
 alias rm="rm -i"                          # confirm before overwriting something
 
 alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
