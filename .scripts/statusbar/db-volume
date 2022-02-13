@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+volume=$(amixer get Master | grep -i "left:" | grep -oP "\\d+%")
+
+echo "墳 $volume"

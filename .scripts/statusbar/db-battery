@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+
+for battery in /sys/class/power_supply/BAT*
+do
+    capacity=$(cat $battery/capacity)
+
+    case $(cat $battery/status) in 
+        "Full") icon="  ";;
+        "Charging") icon=" ";;
+        "Discharging") 
+            if [[ $capacity -le 15 ]]
+            then
+                pkill "notification-daemon"
+                notify-send "Charge is low. Connect Charger"
+                icon=""
+            elif [[ $capacity -le 30 ]]
+            then
+                icon=" "
+            elif [[ $capacity -le 50 ]]
+            then
+                icon=" "
+            elif [[ $capacity -le 75 ]]
+            then
+                icon=" "
+            else
+                icon=" "
+            fi
+            ;;
+    esac
+    echo "$icon $capacity%"
+done

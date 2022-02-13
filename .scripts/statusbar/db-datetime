@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+date=$(date +"%a,%d %b %Y")
+time=$(date +"%H:%M")
+
+# echo " $date $time"
+# echo " $date  $time"
+echo " $date $time"
+
+

@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+
+memory=$(free -m | sed -n "2{p;q}" | awk '{printf("%3.2f GiB", ($3 / 1024))}')
+
+echo " $memory"

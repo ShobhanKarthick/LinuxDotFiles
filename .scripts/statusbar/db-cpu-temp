@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+cpuTemp=$(sensors | grep "Core 0" | awk '{printf("%s°%s", $3, $4)}' | cut -c 2-)
+echo " $cpuTemp"
