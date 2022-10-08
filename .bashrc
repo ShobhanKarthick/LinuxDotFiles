@@ -152,6 +152,10 @@ export PATH="/home/lsw/.scripts/statusbar/:$PATH"
 export PATH="/home/lsw/.local/bin:$PATH"
 
 export PATH=$ANDROID_HOME:$PATH
+export PATH="~/.Cytoscape_v3.9.1/":$PATH
+export PATH="/mnt/LocalDisk/IITM/Sem_7/Academics/Computational_Biology_Laboratory/BT4110/Assignment_3/MGLTools-1.5.7/share/bin":$PATH
+# export PYTHONPATH="/mnt/LocalDisk/IITM/Sem_5/Research_Project/Bacterial_Interactions/New/MSI"
+# export PYTHONPATH="$PYTHONPATH:/mnt/LocalDisk/IITM/Sem_5/Research_Project/Bacterial_Interactions/New/Metquest"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -160,6 +164,7 @@ export NVM_DIR="$HOME/.nvm"
 export QT_QPA_PLATFORMTHEME=qt5ct
 
 ### ALIASES
+alias cls="clear"
 alias cp="cp -i"                          # confirm before overwriting something
 alias mv="mv -i"                          # confirm before overwriting something
 alias rm="rm -i"                          # confirm before overwriting something
@@ -195,6 +200,7 @@ alias gitpat="cat ~/.config/PAT | tr -d "\n" | xclip -sel clip"
 alias pinga="ping archlinux.org"
 alias drone="dragon-drag-and-drop"
 alias btctl="bluetoothctl"
+alias nb="jupyter-notebook"
 
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
@@ -209,4 +215,20 @@ set -o vi
 ### CUSTOM FUNCTIONS
 source ~/.scripts/mkcd
 source ~/.scripts/cdsi
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/lsw/.miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/lsw/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/lsw/.miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/lsw/.miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
