@@ -5,3 +5,7 @@ super + shift + s
 {XF86AudioRaiseVolume, XF86AudioLowerVolume}
     amixer -q sset Master 1%{+,-}; \
     volume-notify
+{XF86MonBrightnessUp, XF86MonBrightnessDown}
+    {brightness_inc, brightness_dec}
+    
+
