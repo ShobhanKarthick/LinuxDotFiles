@@ -6,6 +6,7 @@ end
 -- telescope.load_extension('media_files')
 
 local actions = require "telescope.actions"
+local root_folder = vim.fn.finddir(".git/..", ";")
 
 telescope.setup {
   defaults = {
@@ -81,12 +82,12 @@ telescope.setup {
   },
   pickers = {
     -- Default configuration for builtin pickers goes here:
-    -- picker_name = {
-    --   picker_config_key = value,
-    --   ...
-    -- }
-    -- Now the picker_config_key will be applied every time you call this
-    -- builtin picker
+    find_files = {
+      cwd = root_folder
+    },
+    live_grep = {
+      cwd = root_folder
+    },
   },
 --   extensions = {
 --     media_files = {
@@ -102,6 +103,5 @@ telescope.setup {
     -- please take a look at the readme of the extension you want to configure
   --},
 }
-
 
 
