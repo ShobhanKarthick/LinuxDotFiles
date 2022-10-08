@@ -5,7 +5,11 @@ do
     capacity=$(cat $battery/capacity)
 
     case $(cat $battery/status) in 
-        "Full") icon="  ";;
+        "Full")
+            # pkill "notification-daemon"
+            # notify-send "Charge is Full. Please disconnect the charger"
+            icon=" "
+            ;;
         "Charging") icon=" ";;
         "Discharging") 
             if [[ $capacity -le 15 ]]
