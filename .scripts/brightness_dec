@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+brightness=$(cat /sys/class/backlight/intel_backlight/brightness)
+
+if [[ $brightness -gt 1000 ]]
+then
+    brightness=$(($brightness-1000))
+    echo $brightness > /sys/class/backlight/intel_backlight/brightness
+else
+    echo 0 > /sys/class/backlight/intel_backlight/brightness
+fi
+
