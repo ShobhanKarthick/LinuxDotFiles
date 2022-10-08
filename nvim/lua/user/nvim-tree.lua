@@ -88,6 +88,7 @@ nvim_tree.setup {
       custom_only = false,
       list = {
         -- user mappings go here
+        {key = "t", cb = tree_cb "tabnew"}
       },
     },
     float = {
