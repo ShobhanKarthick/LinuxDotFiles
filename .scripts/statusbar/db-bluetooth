@@ -1,3 +1,10 @@
 #!/usr/bin/bash
 
-echo ""
+status=$(bluetoothctl show | grep Powered | awk -F ': ' '{print $2}')
+
+if [ $status == "yes" ]
+then
+    echo "^c#0082fc^^d^"
+else
+    echo ""
+fi
