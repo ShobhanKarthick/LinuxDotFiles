@@ -201,6 +201,8 @@ alias pinga="ping archlinux.org"
 alias drone="dragon-drag-and-drop"
 alias btctl="bluetoothctl"
 alias nb="jupyter-notebook"
+alias joplin-desktop="/home/lsw/.joplin/Joplin.AppImage"
+alias wifi-reset="sudo modprobe -r ath10k_pci; sudo modprobe ath10k_pci"
 
 ### CUSTOM CONFIGS
 wmname=$(wmctrl -m | grep Name | cut -d : -f 2 | tr -d " ")
