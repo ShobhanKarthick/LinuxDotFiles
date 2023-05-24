@@ -9,4 +9,5 @@ require("config.nvim-tree")
 require("config.autopairs")
 require("config.toggleterm")
 require("config.comments")
+require("config.gitsigns")
 

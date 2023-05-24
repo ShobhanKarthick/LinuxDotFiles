@@ -4,8 +4,12 @@
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
+  ---------------------------------------------------------------------------
+
   -- Packer.Nvim
   use 'wbthomason/packer.nvim'
+
+  ---------------------------------------------------------------------------
 
   -- Telescope: Fuzzy finding, Live grep and much more...
   use {
@@ -13,14 +17,22 @@ return require('packer').startup(function(use)
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
+  ---------------------------------------------------------------------------
+
   -- Rose-Pine: A fantastic colorscheme with many variants!
   use({ 'rose-pine/neovim', as = 'rose-pine' })
+
+  ---------------------------------------------------------------------------
 
   -- Nvim-treesitter: Provides the best language-based highlighting & parsing
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
 
+  ---------------------------------------------------------------------------
+
   -- Undo tree: Enables unlimited undos and a sort of VCS
   use('mbbill/undotree')
+
+  ---------------------------------------------------------------------------
 
   -- LSP Config & Autocompletion
   use {
@@ -45,17 +57,25 @@ return require('packer').startup(function(use)
     }
   }
 
+  ---------------------------------------------------------------------------
+
   -- Nvim-tree: A file explorer
   use({
     'nvim-tree/nvim-tree.lua',
     requires = { 'nvim-tree/nvim-web-devicons' },     -- optional
   })
 
+  ---------------------------------------------------------------------------
+
   -- ToggleTerm: Can spawn mutipple configurable terminal windows inside Nvim
   use { "akinsho/toggleterm.nvim", tag = '*' }
 
+  ---------------------------------------------------------------------------
+
   -- Autopairs: Closes brackets and quotes automatically
   use({ "windwp/nvim-autopairs" })
+
+  ---------------------------------------------------------------------------
 
   -- MarkdownPreview: A super cool markdown viewer - has similar UI like Github
   use({
@@ -65,9 +85,16 @@ return require('packer').startup(function(use)
     ft = { "markdown" },
   })
 
+  ---------------------------------------------------------------------------
+
   -- Commenting
   use("numToStr/Comment.nvim") 
 	use("JoosepAlviste/nvim-ts-context-commentstring")
+
+  ---------------------------------------------------------------------------
+
+  -- Git Stuff
+  use("lewis6991/gitsigns.nvim")
 
   -- flutter-tools.nvim: Flutter Specific Plugin
   --[[ use { ]]
@@ -77,5 +104,7 @@ return require('packer').startup(function(use)
   --[[       'stevearc/dressing.nvim', -- optional for vim.ui.select ]]
   --[[   }, ]]
 --[[ } ]]
+
+  ---------------------------------------------------------------------------
 
 end)
