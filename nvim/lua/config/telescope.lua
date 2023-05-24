@@ -1,21 +1,12 @@
-local status_ok, telescope = pcall(require, "telescope")
-if not status_ok then
-  return
-end
-
--- telescope.load_extension('media_files')
-
-local actions = require "telescope.actions"
 local root_folder = vim.fn.finddir(".git/..", ";")
+local actions = require "telescope.actions"
 
-telescope.setup {
+require('telescope').setup{
   defaults = {
-
     prompt_prefix = " ",
     selection_caret = " ",
     path_display = { "smart" },
-
-    mappings = {
+     mappings = {
       i = {
         ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
@@ -80,8 +71,8 @@ telescope.setup {
       },
     },
   },
+
   pickers = {
-    -- Default configuration for builtin pickers goes here:
     find_files = {
       cwd = root_folder
     },
@@ -89,19 +80,8 @@ telescope.setup {
       cwd = root_folder
     },
   },
---   extensions = {
---     media_files = {
---         -- filetypes whitelist
---         -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
---         filetypes = {"png", "webp", "jpg", "jpeg"},
---         find_cmd = "rg" -- find command (defaults to `fd`)
---       }
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
-  --},
 }
 
-
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>f', builtin.find_files, {})
+vim.keymap.set('n', '<C-f>', builtin.live_grep, {})
