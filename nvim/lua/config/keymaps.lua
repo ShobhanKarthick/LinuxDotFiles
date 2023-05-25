@@ -43,7 +43,14 @@ keymap("n", "<A-`>", ":tabnext#<CR>", opts)
 keymap("n", "n", "nzzzv", opts)
 keymap("n", "N", "Nzzzv", opts)
 
+-- Toggle Term --
+keymap("n", "<leader>g", ":lua _LAZYGIT_TOGGLE()<CR>", opts)
+keymap("n", "<leader>e", ":lua _EXTRA_TERM()<CR>", opts)
+
+------------------------------------------------------------------------
 -- Visual --
+------------------------------------------------------------------------
+
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
