@@ -14,7 +14,10 @@ vim.g.maplocalleader = " "
 --   term_mode = "t",
 --   command_mode = "c",
 
+------------------------------------------------------------------------
 -- Normal Mode --
+------------------------------------------------------------------------
+
 -- Window Navigation --
 keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
@@ -50,7 +53,10 @@ keymap("v", ">", ">gv", opts)
 keymap("v", "<C-J>", ":move '>+1<CR>gv=gv", opts)
 keymap("v", "<C-K>", ":move '<-2<CR>gv=gv", opts)
 
+------------------------------------------------------------------------
 -- Visual Block --
+------------------------------------------------------------------------
+
 -- Move text up and down
 -- <C-J> ==> Simulates Ctrl + Shift + j ==> J is captital, so Shift + j
 keymap("x", "<C-J>", ":move '>+1<CR>gv=gv", opts)
