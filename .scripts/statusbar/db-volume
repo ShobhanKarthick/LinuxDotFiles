@@ -2,4 +2,4 @@
 
 volume=$(amixer get Master | grep -i "left:" | grep -oP "\\d+%")
 
-echo "墳 $volume"
+echo "^c#89b481^󰕾 $volume^d^"

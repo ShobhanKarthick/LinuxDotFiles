@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
-cpuTemp=$(sensors | grep "Core 0" | awk '{printf("%s°%s", $3, $4)}' | cut -c 2-)
-echo " $cpuTemp"
+cpuTemp=$(sensors | grep "Core 0" | awk '{printf("%s°", $3)}' | cut -c 2-)
+echo "^c#7dc5a0^ $cpuTemp^d^"

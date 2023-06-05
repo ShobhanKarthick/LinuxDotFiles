@@ -31,5 +31,5 @@ do
             fi
             ;;
     esac
-    echo "$icon $capacity%"
+    echo "^c#eb6a63^$icon $capacity%^d^"
 done
