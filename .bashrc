@@ -194,6 +194,7 @@ alias cfx="nvim ~/.xmonad/xmonad.hs"
 alias cfxb="nvim ~/.xmobarrc"
 alias cfd="nvim ~/.config/dwm/config.def.h"
 alias cfs="nvim ~/.config/st/config.def.h"
+alias cfk="nvim ~/.config/kitty/kitty.conf"
 alias cfdw="cd ~/.config/dwmblocks/"
 
 alias gitpat="cat ~/.config/PAT | tr -d "\n" | xclip -sel clip"
